@@ -51,23 +51,24 @@ func translateInstructions(
 	var result []byte
 	for p.HasMoreLines() {
 		p.Advance()
-		itype, err := p.InstructionType()
-		if err != nil || itype == parser.L_INSTRUCTION {
+		switch itype, _ := p.InstructionType(); itype {
+		case parser.C_INSTRUCTION:
+			{
+				comp := c.CompByte(p.Comp())
+				dest := c.DestByte(p.Dest())
+				jump := c.JumpByte(p.Jump())
+				binary := c.ComputeCInstruction(dest, comp, jump)
+				result = append(result, fmt.Sprintf("%016b\n", binary)...)
+			}
+		case parser.A_INSTRUCTION:
+			{
+				symbol := p.Symbol()
+				address := st.GetAddress(symbol)
+				binary := fmt.Sprintf("%016b\n", address)
+				result = append(result, []byte(binary)...)
+			}
+		default:
 			continue
-		}
-		if itype == parser.A_INSTRUCTION {
-			symbol := p.Symbol()
-			address := st.GetAddress(symbol)
-
-			binary := fmt.Sprintf("%016b\n", address)
-			result = append(result, []byte(binary)...)
-		} else if itype == parser.C_INSTRUCTION {
-			comp := c.CompByte(p.Comp())
-			dest := c.DestByte(p.Dest())
-			jump := c.JumpByte(p.Jump())
-
-			binary := c.ComputeCInstruction(dest, comp, jump)
-			result = append(result, fmt.Sprintf("%016b\n", binary)...)
 		}
 	}
 	return result
