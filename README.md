@@ -37,16 +37,16 @@ The application performs the following stages:
 
 ```mermaid
 stateDiagram-v2
-  [*] --> Idle
-      Idle --> Preparing: Start
-      Preparing --> Processing: Files loaded
-      Preparing --> Error: Failed to load file(s)
-      Processing --> Exporting: Assembly completed
-      Processing --> Error: Assembly failed
-      Exporting --> Success: Files exported
-      Exporting --> Error: Export failed
-  Success --> [*]: Done — everything succeeded!
-  Error --> [*]: Stopped due to an error
+[*] --> Idle
+    Idle --> Preparing: Start
+    Preparing --> Processing: Files loaded
+    Preparing --> Error: Failed to load file(s)
+    Processing --> Exporting: Assembly completed
+    Processing --> Error: Assembly failed
+    Exporting --> Success: Files exported
+    Exporting --> Error: Export failed
+Success --> [*]: Done — everything succeeded!
+Error --> [*]: Stopped due to an error
 ```
 
 ## Usage
